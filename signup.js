@@ -1,28 +1,45 @@
 document
-    .getElementById("signupForm")
-    .addEventListener("submit", function (event) {
-        event.preventDefault();
+  .getElementById("signupForm")
+  .addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-        // Getting email and password values
-        let userEmail = document.getElementById('userEmail').value;
-        let userPassword = document.getElementById('userPassword').value;
+    let userEmail = document.getElementById("userEmail").value;
+    let userPassword = document.getElementById("userPassword").value;
 
-        console.log(userEmail, userPassword); // Log userEmail and userPassword
+    console.log("Email:", userEmail);
+    console.log("Password:", userPassword);
 
-        // Check if both fields are filled
-        if (userEmail && userPassword) {
-            let userDetails = {
-                email: userEmail,
-                password: userPassword,
-            };
+    try {
+      let API = "https://fakestoreapi.com/users";
+      let getApi = await fetch(API);
+      let apiJson = await getApi.json();
 
-            // Store the details in localStorage
-            let stringifyObj = JSON.stringify(userDetails);
-            localStorage.setItem("user", stringifyObj);
-           
-            // Redirect to the index page
-            window.location.href = "../index.html";
-        } else {
-            alert("Please fill in all fields.");
-        }
-    });
+      let users = [
+        { email: "user1@example.com", password: "password1" },
+        { email: "user2@example.com", password: "password2" },
+        { email: "user3@example.com", password: "password3" },
+      ];
+      let ApiSet = apiJson.find(
+        (user) => user.email === userEmail && user.password === userPassword
+      );
+
+      let isUserValid = users.some(
+        (user) => user.email === userEmail && user.password === userPassword
+      );
+
+      if (ApiSet || isUserValid) {
+        window.location.href = "../pages/sign-in.html";
+      } else {
+        alert("Invalid email or password.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  });
+
+//   "kev02937@"
+// "kevin@gmail.com"
+
+
+
+
